@@ -9,85 +9,93 @@ const createProduct = async (req, res) => {
       stock,
     });
     res.status(200).json({
-      status: "succes",
-      data: {
-        newProduct,
-      },
+      status: "success",
+      data: newProduct,
     });
-  } catch (err) {
-    res.status(400).json({
-      status: "failed",
-      message: err.message,
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
     });
   }
 };
 
 const findProducts = async (req, res) => {
   try {
-    const product = await product.findAll();
+    const products = await Product.findAll();
     res.status(200).json({
-      status: "succes",
-      data: {
-        newProduct,
-      },
+      status: "success",
+      data: products,
     });
-  } catch (err) {
-    res.status(400).json({
-      status: "failed",
-      message: err.message,
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
     });
   }
 };
 
 const findProductById = async (req, res) => {
   try {
-    const product = await product.findOne({
+    const product = await Product.findOne({
       where: {
         id: req.params.id,
       },
     });
     res.status(200).json({
-      status: "succes",
-      data: {
-        newProduct,
-      },
+      status: "success",
+      data: product,
     });
-  } catch (err) {
-    res.status(400).json({
-      status: "failed",
-      message: err.message,
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
     });
   }
 };
 
 const updateProduct = async (req, res) => {
+  const { name, price, stock } = req.body;
   try {
-    const id = req.params.id;
-    await id.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    res.status(200).json({
-      status: "succes",
-      data: {
-        Product,
+    const updatedProduct = await Product.update(
+      {
+        name,
+        price,
+        stock,
       },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({
+      status: "success",
+      data: updatedProduct,
     });
-  } catch (err) {
-    res.status(400).json({
-      status: "failed",
-      message: err.message,
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
     });
   }
 };
 
 const deleteProduct = async (req, res) => {
   try {
-    const id = req.params.id;
-    await Product.findByIdAndRemove(id);
-  } catch (err) {
-    res.status(400).json({
-      status: "failed",
-      message: err.message,
+    const deletedProduct = await Product.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      data: deletedProduct,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
     });
   }
 };
